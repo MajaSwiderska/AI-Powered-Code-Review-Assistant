@@ -69,4 +69,35 @@ def review_code_with_ai(code: str, filename: str, context: str = "") -> dict:
 
     language = detect_language(filename)
 
-    
+
+# real prompt that works
+
+    system_prompt = """ """
+
+    Return ONLY valid JSON with this structure:
+    {
+        "comments": [
+            {
+                "line": 10,
+                "severity": "warning",
+                "category": "style",
+                "body": "Description of the issue",
+                "suggestion": "How to fix it"
+            }
+        ],
+        "summary": "Overall summary of the code quality",
+        "score": 85
+    }
+
+Rules:
+- severity must be: error, warning, or info
+- category must be: bug, security, performance, style, or best_practice
+- line numbers should match the code
+- be constructive and helpful
+- if code is perfect, return empty comments and score 100
+
+    user_prompt = f"""Language: {language}
+Filename: {filename}
+Context: {context}
+
+Code to review:
