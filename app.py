@@ -31,3 +31,30 @@ class ReviewResponse(BaseModel):
     summary: str
     score: str
 
+# Core logic
+
+def detect_language(filename: str) -> str:
+    ""Detect language from file extension""
+    extension_map = {
+        '.py': 'python',
+        '.js': 'javascript',
+        '.ts': 'typescript',
+        '.tsx': 'typescript',
+        '.jsx': 'javascript',
+        '.java': 'java',
+        '.go': 'go',
+        '.rs': 'rust',
+        '.c': 'c',
+        '.cpp': 'cpp',
+        '.rb': 'ruby',
+        '.php': 'php',
+        '.swift': 'swift',
+        '.kt': 'kotlin',
+        '.html': 'html',
+        '.css': 'css',
+        '.json': 'json',
+        '.yaml': 'yaml',
+        '.md': 'markdown',
+        '.sh': 'bash',
+        '.sql': 'sql',
+    }
