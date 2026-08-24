@@ -13,7 +13,7 @@ load_dotenv()
 app = FastAPI(title="AI Code Reviewer")
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Models 
+# Models /debugging it later 
 class CodeReviewRequest(BaseModel):
     code : str
     filename: str = "code.py"
@@ -33,6 +33,7 @@ class ReviewResponse(BaseModel):
 
 # Core logic
 
+# might add to it later on/debug it
 def detect_language(filename: str) -> str:
     ""Detect language from file extension""
     extension_map = {
