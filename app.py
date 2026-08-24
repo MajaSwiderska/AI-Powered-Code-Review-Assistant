@@ -58,3 +58,15 @@ def detect_language(filename: str) -> str:
         '.sh': 'bash',
         '.sql': 'sql',
     }
+
+    for ext, lang in extension_map.items():
+        if filename.endswith(ext):
+            return lang
+    return 'text'
+
+def review_code_with_ai(code: str, filename: str, context: str = "") -> dict:
+    """Actually call OpenAI to review code"""
+
+    language = detect_language(filename)
+
+    
