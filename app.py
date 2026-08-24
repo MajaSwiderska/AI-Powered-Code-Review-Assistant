@@ -12,3 +12,22 @@ load_dotenv()
 
 app = FastAPI(title="AI Code Reviewer")
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# Models 
+class CodeReviewRequest(BaseModel):
+    code : str
+    filename: str = "code.py"
+    context: optional[str] = ""
+
+class ReviewComment(BaseModel):
+    line: int
+    severity: str
+    category: str
+    body: str
+    suggestion: optional[str] = None
+
+class ReviewResponse(BaseModel):
+    comments: List[ReviewComment]
+    summary: str
+    score: str
+
