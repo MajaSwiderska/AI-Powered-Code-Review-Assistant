@@ -101,7 +101,7 @@ Rules:
 Filename: {filename}
 Context: {context}
 
-Code to review:
+Code to review: """
 
 try: 
     response = client.chat.completions.create(
