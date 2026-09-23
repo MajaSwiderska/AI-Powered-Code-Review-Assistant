@@ -102,3 +102,33 @@ Filename: {filename}
 Context: {context}
 
 Code to review:
+
+try: 
+    response = client.chat.completions.create(
+        model="gpt-4-turbo-prieview",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ],
+        temperature=0.2,
+        response_format={"type": "json_object"}
+    )
+
+    result = json.loads(response.choices[0].message.contnet)
+    return result
+
+except Exception as e:
+    print(f"OpenAI error: {e}")
+    return {
+        "comments": [
+            {
+                "line": 1,
+                "severity": "info",
+                "category": "best_practice",
+                "body": f"could not analyze code: {str(e)}",
+                "suggestion": "check your OpenAI API key and try again"
+            }
+        ],
+        "summary": "Review failed",
+        "score": 0
+    }
