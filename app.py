@@ -2,7 +2,7 @@ import os
 import json
 import httpx
 from fastapi import FastAPI, HTTPException
-from pydajtic import BaseModel
+from pydantic import BaseModel
 from openai import OpenAI 
 from dotenv import load_dotenv
 from typing import List, Optional
@@ -17,25 +17,25 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 class CodeReviewRequest(BaseModel):
     code : str
     filename: str = "code.py"
-    context: optional[str] = ""
+    context: Optional[str] = ""
 
 class ReviewComment(BaseModel):
     line: int
     severity: str
     category: str
     body: str
-    suggestion: optional[str] = None
+    suggestion: Optional[str] = None
 
 class ReviewResponse(BaseModel):
     comments: List[ReviewComment]
     summary: str
-    score: str
+    score: int
 
 # Core logic
 
 # might add to it later on/debug it
 def detect_language(filename: str) -> str:
-    ""Detect language from file extension""
+    """Detect language from file extension"""
     extension_map = {
         '.py': 'python',
         '.js': 'javascript',
@@ -73,7 +73,7 @@ def review_code_with_ai(code: str, filename: str, context: str = "") -> dict:
 
 # real prompt that works
 
-    system_prompt = """ """
+    system_prompt = """You are an code reviewer. Analyze the code and provide feedback."""
 
     Return ONLY valid JSON with this structure:
     {
@@ -105,7 +105,7 @@ Code to review:
 
 try: 
     response = client.chat.completions.create(
-        model="gpt-4-turbo-prieview",
+        model="gpt-4-turbo-preview",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
@@ -114,7 +114,7 @@ try:
         response_format={"type": "json_object"}
     )
 
-    result = json.loads(response.choices[0].message.contnet)
+    result = json.loads(response.choices[0].message.content)
     return result
 
 except Exception as e:
@@ -125,10 +125,14 @@ except Exception as e:
                 "line": 1,
                 "severity": "info",
                 "category": "best_practice",
-                "body": f"could not analyze code: {str(e)}",
-                "suggestion": "check your OpenAI API key and try again"
+                "body": f"Could not analyze code: {str(e)}",
+                "suggestion": "Check your OpenAI API key and try again"
             }
         ],
         "summary": "Review failed",
         "score": 0
     }
+if __name__ == "__main__":
+    print(" Starting AI Code Reviewer...")
+    print("Visit http://localhost:8000/docs for API docs")
+    uvicorn.run(app, host="0.0.0.0", port=8000)
