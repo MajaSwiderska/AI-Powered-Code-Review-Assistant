@@ -103,35 +103,35 @@ Context: {context}
 
 Code to review: """
 
-try: 
-    response = client.chat.completions.create(
-        model="gpt-4-turbo-preview",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt}
-        ],
-        temperature=0.2,
-        response_format={"type": "json_object"}
-    )
+    try: 
+        response = client.chat.completions.create(
+            model="gpt-4-turbo-preview",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.2,
+            response_format={"type": "json_object"}
+        )
 
-    result = json.loads(response.choices[0].message.content)
-    return result
+        result = json.loads(response.choices[0].message.content)
+        return result
 
-except Exception as e:
-    print(f"OpenAI error: {e}")
-    return {
-        "comments": [
-            {
-                "line": 1,
-                "severity": "info",
-                "category": "best_practice",
-                "body": f"Could not analyze code: {str(e)}",
-                "suggestion": "Check your OpenAI API key and try again"
-            }
-        ],
-        "summary": "Review failed",
-        "score": 0
-    }
+    except Exception as e:
+        print(f"OpenAI error: {e}")
+        return {
+            "comments": [
+                {
+                    "line": 1,
+                    "severity": "info",
+                    "category": "best_practice",
+                    "body": f"Could not analyze code: {str(e)}",
+                    "suggestion": "Check your OpenAI API key and try again"
+                }
+            ],
+            "summary": "Review failed",
+            "score": 0
+        }
 if __name__ == "__main__":
     print(" Starting AI Code Reviewer...")
     print("Visit http://localhost:8000/docs for API docs")
