@@ -73,7 +73,7 @@ def review_code_with_ai(code: str, filename: str, context: str = "") -> dict:
 
 # real prompt that works
 
-    system_prompt = """You are an code reviewer. Analyze the code and provide feedback."""
+    system_prompt = """You are an code reviewer. Analyze the code and provide feedback.
 
     Return ONLY valid JSON with this structure:
     {
@@ -95,7 +95,7 @@ Rules:
 - category must be: bug, security, performance, style, or best_practice
 - line numbers should match the code
 - be constructive and helpful
-- if code is perfect, return empty comments and score 100
+- if code is perfect, return empty comments and score 100 """
 
     user_prompt = f"""Language: {language}
 Filename: {filename}
