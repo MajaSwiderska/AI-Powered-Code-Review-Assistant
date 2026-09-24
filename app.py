@@ -157,7 +157,7 @@ async def review_code(request: CodeReviewRequest):
             ))
         return ReviewResponse(
             comments=comments,
-            summary=result.get("summary, "Review completed"),
+            summary=result.get("summary", "Review completed"),
             score=result.get("score", 50)
         )
     except Exception as e:
