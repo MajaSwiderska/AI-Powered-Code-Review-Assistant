@@ -132,6 +132,54 @@ Code to review: """
             "summary": "Review failed",
             "score": 0
         }
+
+@app.get("/")
+async def root():
+    return {"message": "AI Code Reviewer is running", "status": "ready"}
+
+@app.post("/review", response_model=ReviewResponse)
+async def review_code(request: CodeReviewRequest):
+    """Review a piece of code"""
+    try:
+        result = review_code_with_ai(
+            code=request.code,
+            filename=request.filename,
+            context=request.context
+        )
+        comments = []
+        for comment in result.get("comments", []):
+            comments.append(ReviewComment(
+                line=comment.get("line", 1),
+                severity=comment.get("severity", "info"),
+                category=comment.get("category", "general"),
+                body=comment.get("body", ""),
+                suggestion=comment.get("suggestion")
+            ))
+        return ReviewResponse(
+            comments=comments,
+            summary=result.get("summary, "Review completed"),
+            score=result.get("score", 50)
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/review/mock")
+async def review_code_mock(request: CodeReviewRequest):
+    """Mock review for testing - No API calls"""
+    return ReviewResponse(
+        comments=[
+            ReviewComment(
+                line=1,
+                severity="info",
+                category="style",
+                body="This is a mock review comment",
+                suggestion="Consider adding more context to this comment."
+            )
+        ],
+        summary="Mock review completed",
+        score=75
+    )
+
 if __name__ == "__main__":
     print(" Starting AI Code Reviewer...")
     print("Visit http://localhost:8000/docs for API docs")
